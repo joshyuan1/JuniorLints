@@ -1,0 +1,25 @@
+{
+  "name": "JuniorLints",
+  "version": "1.0.0",
+  "description": "web application for Python static analysis",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "concurrently \"npm start --prefix server\" \"npm start --prefix client\"",
+    "basin-postbuild": "npm install --prefix client && npm install --only=dev --no-shrinkwrap --prefix client && npm run build --prefix client && npm install --prefix server"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/joshyuan1/JuniorLints.git"
+  },
+  "keywords": [],
+  "author": "Josh Yuan <jtyuan@middlebury.edu>",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/joshyuan1/JuniorLints/issues"
+  },
+  "homepage": "https://github.com/joshyuan1/JuniorLints#readme",
+  "devDependencies": {
+    "concurrently": "^3.5.1"
+  }
+}
