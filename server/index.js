@@ -17,10 +17,13 @@ if (process.env.NODE_ENV === 'production') {
   });
 }
 
-
-//app.get('/', (request, response) => {
-//  response.send('Hello World');
-//});
+// complementary to the POST request in FileUpload.js
+app.post('/submissions/', (request, response) => {
+  const test = request.body;
+  response.send(test);
+  console.log('server post triggered');
+  console.log(test);
+});
 
 const server = http.createServer(app).listen(process.env.PORT || 5042);
 console.log('Listening on port %d', server.address().port);
