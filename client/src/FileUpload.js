@@ -16,7 +16,7 @@ class FileUpload extends Component {
     console.log(file);
 
     const request = new Request(
-      '/submissions/',
+      '/submissions', // is it a problem that this doesn't exist?
       {
         method: 'POST',
         body: JSON.stringify(file),

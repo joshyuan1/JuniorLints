@@ -18,10 +18,10 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 // complementary to the POST request in FileUpload.js
-app.post('/submissions/', (request, response) => {
+app.post('/submissions', (request, response) => {
+  console.log('server post triggered');
   const test = request.body;
   response.send(test);
-  console.log('server post triggered');
   console.log(test);
 });
 
