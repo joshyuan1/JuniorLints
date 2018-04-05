@@ -21,6 +21,14 @@ if (process.env.NODE_ENV === 'production') {
 app.post('/submissions', (request, response) => {
   console.log('server post triggered');
   const test = request.body;
+  // Obtain file data from the request
+  // Create a temporary file with the request body contents
+  // fs.mkdtemp
+  // Run pylint with that temporary
+  // Read in the result file and set if back
+  // Process run pylint
+
+  // file encapsulated as a form
   response.send(test);
   console.log(test);
 });
