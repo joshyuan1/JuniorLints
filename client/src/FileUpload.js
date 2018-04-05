@@ -12,33 +12,40 @@ class FileUpload extends Component {
   }
 
   handleChange(file) {
-    console.log('uploaded'); // test code
-    console.log(file);
+    let contents;
 
-    const request = new Request(
+    const reader = new FileReader();
+    reader.readAsBinaryString(file);
+    reader.onloadend = function(){
+      contents = reader.result;
+      console.log(contents);
+
+      const request = new Request(
       '/submissions', // is it a problem that this doesn't exist?
       {
         method: 'POST',
-        body: JSON.stringify(file),
-        headers: new Headers({ 'Content-type': 'application/json' }),
+        body: contents,
       },
-    );
+      );
 
-    fetch(request)
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error(response.status_text);
-        }
-        return response.json();
-      })
-      .then((file) => {
-        this.setState({ currentFile: file });
-      })
-      .catch(err => console.log(err));
-  };
+      fetch(request)
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error(response.status_text);
+          }
+          return response.json();
+        })
+        .then((file) => {
+          this.setState({ currentFile: file });
+        })
+        .catch(err => console.log(err));
+      };
+    }
+
+
 
   render() {
-    const uploadButton = <input type="file" id="file" onChange={e => this.handleChange(e.target.files)} />;
+    const uploadButton = <input type="file" id="file" onChange={e => this.handleChange(e.target.files[0])} />;
 
     return (
       <div>

@@ -1,0 +1,24 @@
+[
+    {
+        "type": "convention",
+        "module": "samplePython",
+        "obj": "",
+        "line": 1,
+        "column": 0,
+        "path": "samplePython.py",
+        "symbol": "invalid-name",
+        "message": "Module name \"samplePython\" doesn't conform to snake_case naming style",
+        "message-id": "C0103"
+    },
+    {
+        "type": "convention",
+        "module": "samplePython",
+        "obj": "",
+        "line": 1,
+        "column": 0,
+        "path": "samplePython.py",
+        "symbol": "missing-docstring",
+        "message": "Missing module docstring",
+        "message-id": "C0111"
+    }
+]
