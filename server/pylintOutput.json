@@ -1,0 +1,13 @@
+[
+    {
+        "type": "error",
+        "module": "userCode",
+        "obj": "",
+        "line": 1,
+        "column": 0,
+        "path": "userCode.py",
+        "symbol": "syntax-error",
+        "message": "invalid syntax (&lt;string&gt;, line 1)",
+        "message-id": "E0001"
+    }
+]
