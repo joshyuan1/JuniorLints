@@ -7,18 +7,21 @@ import React, { Component } from 'react';
 class FileUpload extends Component {
   constructor(props) {
     super(props);
+
+
+
     this.state = { currentFile: null, }
     this.handleChange = this.handleChange.bind(this);
   }
 
-  handleChange(file) {
+  handleChange(file, props) {
     let contents;
+    var callbackProp = this.props.callback;
 
     const reader = new FileReader();
     reader.readAsBinaryString(file);
     reader.onloadend = function(){
       contents = reader.result;
-      console.log(contents);
 
       const request = new Request(
       '/submissions', // is it a problem that this doesn't exist?
@@ -35,8 +38,11 @@ class FileUpload extends Component {
           }
           return response.json();
         })
-        .then((file) => {
-          this.setState({ currentFile: file });
+        .then((linterOutput) => {
+          console.log("****************");
+          console.log(contents);
+          console.log(linterOutput);
+          callbackProp(contents, linterOutput);
         })
         .catch(err => console.log(err));
       };
@@ -44,8 +50,9 @@ class FileUpload extends Component {
 
 
 
-  render() {
-    const uploadButton = <input type="file" id="file" onChange={e => this.handleChange(e.target.files[0])} />;
+  render(props) {
+
+    const uploadButton = <input type="file" id="file" onChange={e => this.handleChange(e.target.files[0], this.props)} />;
 
     return (
       <div>
