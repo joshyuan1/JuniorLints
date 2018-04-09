@@ -3,6 +3,7 @@ import logo from './logo.svg';
 import './App.css';
 
 import FileUpload from './FileUpload';
+import Viewer from './Viewer';
 
 class App extends Component {
   constructor(){
@@ -24,8 +25,14 @@ class App extends Component {
      if (this.state.mode === 'upload'){
        comp = fileUpload;
      } else {
-       comp = (<div>{this.state.pyCode}</div>);
-       //comp = <Viewer pyCode = {this.state.pyCode} linterOutput = {this.state.linterOutput}>
+       //comp = (<div>{this.state.pyCode}</div>);
+       console.log(JSON.stringify(this.state.linterOutput));
+       comp = (
+         <Viewer
+          pyCode = {this.state.pyCode}
+          linterOutput = {this.state.linterOutput}
+          changeMode = {()=> this.setState({mode: 'upload'})}
+        />)
      }
 
     return (

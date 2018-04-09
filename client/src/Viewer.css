@@ -1,0 +1,19 @@
+#flex-container {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    border: 1px black solid;
+    align: left;
+}
+
+.code {
+    width: 55%;
+    border: 1px black solid;
+    background: #369;
+}
+
+.linterOutput {
+    width: 45%;
+    border: 1px black solid;
+    background: #369;
+}

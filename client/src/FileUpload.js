@@ -39,9 +39,6 @@ class FileUpload extends Component {
           return response.json();
         })
         .then((linterOutput) => {
-          console.log("****************");
-          console.log(contents);
-          console.log(linterOutput);
           callbackProp(contents, linterOutput);
         })
         .catch(err => console.log(err));
