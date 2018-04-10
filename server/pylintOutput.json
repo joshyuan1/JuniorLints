@@ -1,13 +1,123 @@
 [
     {
-        "type": "error",
+        "type": "convention",
+        "module": "userCode",
+        "obj": "",
+        "line": 23,
+        "column": 0,
+        "path": "userCode.py",
+        "symbol": "trailing-whitespace",
+        "message": "Trailing whitespace",
+        "message-id": "C0303"
+    },
+    {
+        "type": "convention",
+        "module": "userCode",
+        "obj": "",
+        "line": 24,
+        "column": 0,
+        "path": "userCode.py",
+        "symbol": "trailing-whitespace",
+        "message": "Trailing whitespace",
+        "message-id": "C0303"
+    },
+    {
+        "type": "convention",
+        "module": "userCode",
+        "obj": "",
+        "line": 25,
+        "column": 0,
+        "path": "userCode.py",
+        "symbol": "trailing-whitespace",
+        "message": "Trailing whitespace",
+        "message-id": "C0303"
+    },
+    {
+        "type": "convention",
+        "module": "userCode",
+        "obj": "",
+        "line": 37,
+        "column": 0,
+        "path": "userCode.py",
+        "symbol": "trailing-whitespace",
+        "message": "Trailing whitespace",
+        "message-id": "C0303"
+    },
+    {
+        "type": "convention",
+        "module": "userCode",
+        "obj": "",
+        "line": 42,
+        "column": 0,
+        "path": "userCode.py",
+        "symbol": "trailing-whitespace",
+        "message": "Trailing whitespace",
+        "message-id": "C0303"
+    },
+    {
+        "type": "convention",
+        "module": "userCode",
+        "obj": "",
+        "line": 46,
+        "column": 0,
+        "path": "userCode.py",
+        "symbol": "trailing-whitespace",
+        "message": "Trailing whitespace",
+        "message-id": "C0303"
+    },
+    {
+        "type": "convention",
+        "module": "userCode",
+        "obj": "",
+        "line": 48,
+        "column": 0,
+        "path": "userCode.py",
+        "symbol": "trailing-whitespace",
+        "message": "Trailing whitespace",
+        "message-id": "C0303"
+    },
+    {
+        "type": "convention",
+        "module": "userCode",
+        "obj": "",
+        "line": 50,
+        "column": 0,
+        "path": "userCode.py",
+        "symbol": "trailing-whitespace",
+        "message": "Trailing whitespace",
+        "message-id": "C0303"
+    },
+    {
+        "type": "convention",
         "module": "userCode",
         "obj": "",
         "line": 1,
         "column": 0,
         "path": "userCode.py",
-        "symbol": "syntax-error",
-        "message": "invalid syntax (&lt;string&gt;, line 1)",
-        "message-id": "E0001"
+        "symbol": "invalid-name",
+        "message": "Module name \"userCode\" doesn't conform to snake_case naming style",
+        "message-id": "C0103"
+    },
+    {
+        "type": "convention",
+        "module": "userCode",
+        "obj": "",
+        "line": 47,
+        "column": 4,
+        "path": "userCode.py",
+        "symbol": "invalid-name",
+        "message": "Constant name \"temp\" doesn't conform to UPPER_CASE naming style",
+        "message-id": "C0103"
+    },
+    {
+        "type": "warning",
+        "module": "userCode",
+        "obj": "",
+        "line": 8,
+        "column": 0,
+        "path": "userCode.py",
+        "symbol": "unused-import",
+        "message": "Unused import sys",
+        "message-id": "W0611"
     }
 ]
