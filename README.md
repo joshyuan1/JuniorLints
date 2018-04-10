@@ -6,7 +6,7 @@ Development is hosted on GitHub: https://github.com/joshyuan1/JuniorLints
 
 ## Deploying to Basin
 
-In production, JuniorLints is deployed to basin.cs.middlebury.edu (where it is typically run within `screen` on port 5052). To deploy:
+In production, JuniorLints is deployed to basin.cs.middlebury.edu (where it is typically run within `screen` on port 5054). To deploy:
 
 1. Build production assets for the client application (from the top-level directory):
 
