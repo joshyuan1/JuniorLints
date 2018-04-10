@@ -1,13 +1,24 @@
 [
     {
-        "type": "error",
+        "type": "convention",
         "module": "userCode",
         "obj": "",
         "line": 1,
         "column": 0,
         "path": "userCode.py",
-        "symbol": "syntax-error",
-        "message": "invalid syntax (&lt;string&gt;, line 1)",
-        "message-id": "E0001"
+        "symbol": "invalid-name",
+        "message": "Module name \"userCode\" doesn't conform to snake_case naming style",
+        "message-id": "C0103"
+    },
+    {
+        "type": "convention",
+        "module": "userCode",
+        "obj": "",
+        "line": 1,
+        "column": 0,
+        "path": "userCode.py",
+        "symbol": "missing-docstring",
+        "message": "Missing module docstring",
+        "message-id": "C0111"
     }
 ]
