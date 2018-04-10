@@ -53,6 +53,7 @@ class FileUpload extends Component {
 
     return (
       <div>
+      <h3 align="center">Begin by uploading a Python file</h3>
         {uploadButton}
       </div>
     );
