@@ -1,8 +1,32 @@
 // Initial code from GitHub
 // https://gist.github.com/AshikNesin/e44b1950f6a24cfcd85330ffc1713513
 
+import styled from 'styled-components';
+
+//import { Panel } from '../node_modules/reactstrap';
+
 import React, { Component } from 'react';
 import './Viewer.css';
+
+const UserCodeTitle = styled.h1`
+margin-left: 5%;
+// padding-right: 5%;
+`;
+
+const LinterOutputTitle = styled.h1`
+margin-left: 5%;
+// margin-right: 5%;
+`;
+
+const UserCode = styled.pre`
+margin-left: 5%;
+// padding-left: 5%;
+`;
+
+const LinterOutput = styled.pre`
+margin-left: 5%;
+padding-right: 5%;
+`;
 
 function formatLO(linterOutput){
   //Filter out unneccesary/advanced errors.
@@ -26,19 +50,20 @@ class Viewer extends Component {
   render(props) {
 
     return(
+
       <div>
-        <div id="flex-container">
+        <div class="flex-container">
           <div id="code">
-            <h1 align = "left">Your code:</h1>
-            <pre align = "left">{this.props.pyCode}</pre>
+            <UserCodeTitle>Your code:</UserCodeTitle>
+            <UserCode align = "left">{this.props.pyCode}</UserCode>
           </div>
           <div id="linterOutput">
-            <h1 align = "left">Our feedback:</h1>
-            <pre align = "left">{formatLO(this.props.linterOutput)}</pre>
+            <LinterOutputTitle>Our feedback:</LinterOutputTitle>
+            <LinterOutput align = "left">{formatLO(this.props.linterOutput)}</LinterOutput>
           </div>
         </div>
         <div>
-          <button onClick={()=> this.props.changeMode()}>Lint another file.</button>
+          <button onClick={()=> this.props.changeMode()}>Lint another file</button>
         </div>
       </div>
 

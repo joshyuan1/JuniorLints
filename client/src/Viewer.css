@@ -1,19 +1,23 @@
-#flex-container {
+.flex-container {
     display: flex;
     flex-direction: row;
-    width: 100%;
-    border: 1px black solid;
-    align: left;
+    justify-content: center;
+}
+.flex-container > div {
+  background-color: DodgerBlue;
+  width: 50%;
+  margin: 20px;
+  text-align: left;
+  font-size: 15px;
 }
 
 .code {
-    width: 55%;
-    border: 1px black solid;
-    background: #369;
+    background-color: White;
 }
 
-.linterOutput {
+/*.linterOutput {
     width: 45%;
     border: 1px black solid;
     background: #369;
-}
+    background-color: powderblue;
+}*/

@@ -1,24 +1,13 @@
 [
     {
-        "type": "convention",
+        "type": "error",
         "module": "userCode",
         "obj": "",
-        "line": 1,
+        "line": 4,
         "column": 0,
         "path": "userCode.py",
-        "symbol": "invalid-name",
-        "message": "Module name \"userCode\" doesn't conform to snake_case naming style",
-        "message-id": "C0103"
-    },
-    {
-        "type": "convention",
-        "module": "userCode",
-        "obj": "",
-        "line": 1,
-        "column": 0,
-        "path": "userCode.py",
-        "symbol": "missing-docstring",
-        "message": "Missing module docstring",
-        "message-id": "C0111"
+        "symbol": "syntax-error",
+        "message": "unexpected indent (&lt;string&gt;, line 4)",
+        "message-id": "E0001"
     }
 ]
