@@ -7,11 +7,7 @@
         "column": 0,
         "path": "userCode.py",
         "symbol": "syntax-error",
-<<<<<<< HEAD
         "message": "unexpected indent (&lt;string&gt;, line 4)",
-=======
-        "message": "invalid syntax (&lt;string&gt;, line 1)",
->>>>>>> 2faf677124f56427b570c41db7d5168db8244366
         "message-id": "E0001"
     }
 ]

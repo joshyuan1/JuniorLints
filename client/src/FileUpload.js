@@ -1,8 +1,35 @@
 // Initial code from GitHub
 // https://gist.github.com/AshikNesin/e44b1950f6a24cfcd85330ffc1713513
 
+import styled from 'styled-components';
+
 import React, { Component } from 'react';
-// import axios, { post } from 'axios';
+
+import './FileUpload.css';
+
+const Instructions = styled.h3`
+padding-top: 50px;
+padding-bottom: 20px;
+font-size: 20px;
+`;
+
+const ButtonLabel = styled.label`
+    transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+    background-color: DarkGray;
+    color: black;
+    font-size: 16px;
+    padding: 16px 30px;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    text-align: center;
+    width: 100px;
+`
+;
+const UploadButton = styled.input`
+
+`;
 
 class FileUpload extends Component {
   constructor(props) {
@@ -49,12 +76,14 @@ class FileUpload extends Component {
 
   render(props) {
 
-    const uploadButton = <input type="file" id="file" onChange={e => this.handleChange(e.target.files[0], this.props)} />;
+    const uploadButton = <UploadButton type="file" id="file" onChange={e => this.handleChange(e.target.files[0], this.props)} />;
 
     return (
       <div>
-      <h3 align="center">Begin by uploading a Python file</h3>
-        {uploadButton}
+      <Instructions align="center">Begin by uploading your favorite Python file</Instructions>
+      <ButtonLabel>
+        {uploadButton} Choose File
+      </ButtonLabel>
       </div>
     );
   }

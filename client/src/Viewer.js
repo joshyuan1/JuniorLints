@@ -28,6 +28,17 @@ margin-left: 5%;
 padding-right: 5%;
 `;
 
+const Button = styled.button`
+    background-color: DarkGray;
+    color: black;
+    font-size: 16px;
+    padding: 20px 30px;
+    border: none;
+    cursor: pointer;
+    border-radius: 3px;
+    text-align: center;
+`;
+
 function formatLO(linterOutput){
   //Filter out unneccesary/advanced errors.
   let errors = linterOutput.slice();
@@ -63,7 +74,7 @@ class Viewer extends Component {
           </div>
         </div>
         <div>
-          <button onClick={()=> this.props.changeMode()}>Lint another file</button>
+          <Button onClick={()=> this.props.changeMode()}>Lint Another File</Button>
         </div>
       </div>
 

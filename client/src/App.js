@@ -38,8 +38,8 @@ class App extends Component {
     return (
       <div className="App">
         <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h1 className="App-title">Welcome to JuniorLints</h1>
+          <h1 className="App-title">JuniorLints</h1>
+          <h3 className="App-subtitle">Online Static Analysis for Python</h3>
         </header>
         {comp}
       </div>
