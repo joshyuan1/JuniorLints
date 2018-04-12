@@ -39,16 +39,16 @@ const Button = styled.button`
     text-align: center;
 `;
 
-function formatLO(linterOutput){
+function formatLO(linterOutput, pyCode){
   //Filter out unneccesary/advanced errors.
+  const numLines = pyCode.slice().split("\n").length;
+  const a = new Array(numLines);
+  a.fill("\n");
   let errors = linterOutput.slice();
-  errors.sort((a1, a2) => a1.line - a2.line);
-  console.log(errors);
-  let r = "";
   errors.forEach((item) => {
-    r += (`Line ${item.line}: ${item.message} \n`);
+    a[item.line - 1]= (`Line ${item.line}: ${item.message} \n`);
   });
-  return(r);
+  return(a.join(""));
 }
 
 
@@ -70,7 +70,7 @@ class Viewer extends Component {
           </div>
           <div id="linterOutput">
             <LinterOutputTitle>Our feedback:</LinterOutputTitle>
-            <LinterOutput align = "left">{formatLO(this.props.linterOutput)}</LinterOutput>
+            <LinterOutput align = "left">{formatLO(this.props.linterOutput, this.props.pyCode)}</LinterOutput>
           </div>
         </div>
         <div>
