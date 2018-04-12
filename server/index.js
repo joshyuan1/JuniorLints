@@ -42,7 +42,8 @@ app.post('/submissions', (request, response) => {
     }
   });
 
-  const data = require('./pylintOutput.json');
+  const data = JSON.parse(fs.readFileSync('pylintOutput.json', 'utf8'));
+  
   response.send(data);
 });
 
