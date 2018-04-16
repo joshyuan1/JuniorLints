@@ -63,7 +63,7 @@ class Viewer extends Component {
     return(
 
       <div>
-        <div class="flex-container">
+        <div className="flex-container">
           <div id="code">
             <UserCodeTitle>Your code:</UserCodeTitle>
             <UserCode align = "left">{this.props.pyCode}</UserCode>

@@ -23,28 +23,30 @@ app.use(bodyParser.text());
 
 // complementary to the POST request in FileUpload.js
 app.post('/submissions', (request, response) => {
-  console.log('server post triggered');
-  console.log(request.body);
 
   fs.writeFile('userCode.py', request.body, (err) => {
     if(err) throw err;
     console.log('The file has been saved!');
+
+    var exec = require('child_process').exec, child;
+    //runs command line
+    child = exec('pylint ./userCode.py --output-format=json > pylintOutput.json',
+    function (error, stdout, stderr) {
+      //console.log('stdout: ' + stdout);
+      //console.log('stderr: ' + stderr);
+      if (error !== null) {
+        console.log('exec error: ' + error);
+
+
+      }
+      const data = JSON.parse(fs.readFileSync('pylintOutput.json', 'utf8'));
+
+      response.send(data);
+    });
+
   });
 
-  var exec = require('child_process').exec, child;
-  //runs command line
-  child = exec('pylint ./userCode.py --output-format=json > pylintOutput.json',
-  function (error, stdout, stderr) {
-    console.log('stdout: ' + stdout);
-    console.log('stderr: ' + stderr);
-    if (error !== null) {
-      console.log('exec error: ' + error);
-    }
-  });
 
-  const data = JSON.parse(fs.readFileSync('pylintOutput.json', 'utf8'));
-  
-  response.send(data);
 });
 
 
