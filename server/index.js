@@ -3,6 +3,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const app = express();
 const fs = require('fs');
+const tmp = require('tmp');
 
 // express only serves static assets in production
 if (process.env.NODE_ENV === 'production') {
@@ -23,14 +24,16 @@ app.use(bodyParser.text());
 
 // complementary to the POST request in FileUpload.js
 app.post('/submissions', (request, response) => {
-
-  fs.writeFile('userCode.py', request.body, (err) => {
+  const filename = tmp.tmpNameSync({dir: './tempFiles'});
+  //const filename = Date.now(); // temporary filename. unique unless two users in one millisec
+  fs.writeFile(`${filename}.py`, request.body, (err) => {
     if(err) throw err;
     console.log('The file has been saved!');
 
     var exec = require('child_process').exec, child;
+
     //runs command line
-    child = exec('pylint ./userCode.py --output-format=json > pylintOutput.json',
+    child = exec(`pylint ${filename}.py --output-format=json > ${filename}.json`,
     function (error, stdout, stderr) {
       //console.log('stdout: ' + stdout);
       //console.log('stderr: ' + stderr);
@@ -39,7 +42,7 @@ app.post('/submissions', (request, response) => {
 
 
       }
-      const data = JSON.parse(fs.readFileSync('pylintOutput.json', 'utf8'));
+      const data = JSON.parse(fs.readFileSync(`${filename}.json`, 'utf8'));
 
       response.send(data);
     });
