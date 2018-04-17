@@ -4,16 +4,15 @@
     justify-content: center;
 }
 .flex-container > div {
-  background-color: DodgerBlue;
   width: 50%;
   margin: 20px;
   text-align: left;
   font-size: 15px;
 }
 
-.code {
+/*.code {
     background-color: White;
-}
+}*/
 
 /*.linterOutput {
     width: 45%;

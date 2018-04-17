@@ -7,26 +7,7 @@ import styled from 'styled-components';
 
 import React, { Component } from 'react';
 import './Viewer.css';
-
-const UserCodeTitle = styled.h1`
-margin-left: 5%;
-// padding-right: 5%;
-`;
-
-const LinterOutputTitle = styled.h1`
-margin-left: 5%;
-// margin-right: 5%;
-`;
-
-const UserCode = styled.pre`
-margin-left: 5%;
-// padding-left: 5%;
-`;
-
-const LinterOutput = styled.pre`
-margin-left: 5%;
-padding-right: 5%;
-`;
+import Highlight from 'react-highlight.js'
 
 const Button = styled.button`
     background-color: DarkGray;
@@ -65,16 +46,25 @@ class Viewer extends Component {
       <div>
         <div className="flex-container">
           <div id="code">
-            <UserCodeTitle>Your code:</UserCodeTitle>
-            <UserCode align = "left">{this.props.pyCode}</UserCode>
+            <h1 align = "center">Your Code</h1>
+            <pre align = "left">
+              <Highlight language={'python'}>
+                {this.props.pyCode}
+              </Highlight>
+            </pre>
           </div>
           <div id="linterOutput">
-            <LinterOutputTitle>Our feedback:</LinterOutputTitle>
-            <LinterOutput align = "left">{formatLO(this.props.linterOutput, this.props.pyCode)}</LinterOutput>
+            <h1 align = "center">Our Feedback</h1>
+            <pre align = "left">
+              <Highlight language={'shell session'}>
+                {formatLO(this.props.linterOutput, this.props.pyCode)}
+              </Highlight>
+            </pre>
           </div>
         </div>
         <div>
           <Button onClick={()=> this.props.changeMode()}>Lint Another File</Button>
+          <h1> </h1>
         </div>
       </div>
 
