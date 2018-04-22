@@ -4,6 +4,7 @@ import './App.css';
 
 import FileUpload from './FileUpload';
 import Viewer from './Viewer';
+import TestComponent from './TestComponent';
 
 import { Jumbotron } from 'react-bootstrap';
 import { Button } from 'react-bootstrap';
@@ -35,7 +36,8 @@ class App extends Component {
           pyCode = {this.state.pyCode}
           linterOutput = {this.state.linterOutput}
           changeMode = {()=> this.setState({mode: 'upload'})}
-        />)
+        />
+        )
      }
 
     return (
