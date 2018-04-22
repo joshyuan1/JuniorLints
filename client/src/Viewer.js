@@ -7,7 +7,9 @@ import styled from 'styled-components';
 
 import React, { Component } from 'react';
 import './Viewer.css';
-import Highlight from 'react-highlight.js'
+import SyntaxHighlighter from 'react-syntax-highlighter';
+import { monokaiSublime } from 'react-syntax-highlighter/styles/hljs';
+
 
 const Button = styled.button`
     background-color: DarkGray;
@@ -33,6 +35,7 @@ function formatLO(linterOutput, pyCode){
 }
 
 
+
 class Viewer extends Component {
   constructor(props) {
     super(props);
@@ -41,6 +44,8 @@ class Viewer extends Component {
 
   render(props) {
 
+    const line = "hello this is the whole line";
+
     return(
 
       <div>
@@ -48,17 +53,25 @@ class Viewer extends Component {
           <div id="code">
             <h1 align = "center">Your Code</h1>
             <pre align = "left">
-              <Highlight language={'python'}>
+              <SyntaxHighlighter 
+                language='python' 
+                showLineNumbers={true} 
+                style={monokaiSublime}
+                wrapLines={true}
+              >
                 {this.props.pyCode}
-              </Highlight>
+              </SyntaxHighlighter>
             </pre>
           </div>
           <div id="linterOutput">
             <h1 align = "center">Our Feedback</h1>
             <pre align = "left">
-              <Highlight language={'shell session'}>
+              <SyntaxHighlighter 
+                language='shell'
+                style={monokaiSublime}
+              >
                 {formatLO(this.props.linterOutput, this.props.pyCode)}
-              </Highlight>
+              </SyntaxHighlighter>
             </pre>
           </div>
         </div>
