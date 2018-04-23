@@ -3,7 +3,7 @@
 
 import styled from 'styled-components';
 
-//import { Panel } from '../node_modules/reactstrap';
+// import { Panel } from '../node_modules/reactstrap';
 
 import React, { Component } from 'react';
 import './Viewer.css';
@@ -22,52 +22,49 @@ const Button = styled.button`
     text-align: center;
 `;
 
-function formatLO(linterOutput, pyCode){
-  //Filter out unneccesary/advanced errors.
-  const numLines = pyCode.slice().split("\n").length;
+function formatLO(linterOutput, pyCode) {
+  // Filter out unneccesary/advanced errors.
+  const numLines = pyCode.slice().split('\n').length;
   const a = new Array(numLines);
-  a.fill("\n");
-  let errors = linterOutput.slice();
+  a.fill('\n');
+  const errors = linterOutput.slice();
   errors.forEach((item) => {
-    a[item.line - 1]= (`Line ${item.line}: ${item.message} \n`);
+    a[item.line - 1] = (`Line ${item.line}: ${item.message} \n`);
   });
-  return(a.join(""));
+  return (a.join(''));
 }
-
 
 
 class Viewer extends Component {
   constructor(props) {
     super(props);
-
   }
 
   render(props) {
+    const line = 'hello this is the whole line';
 
-    const line = "hello this is the whole line";
-
-    return(
+    return (
 
       <div>
         <div className="flex-container">
           <div id="code">
-            <h1 align = "center">Your Code</h1>
-            <pre align = "left">
-              <SyntaxHighlighter 
-                language='python' 
-                showLineNumbers={true} 
+            <h1 align="center">Your Code</h1>
+            <pre align="left">
+              <SyntaxHighlighter
+                language="python"
+                showLineNumbers
                 style={monokaiSublime}
-                wrapLines={true}
+                wrapLines
               >
                 {this.props.pyCode}
               </SyntaxHighlighter>
             </pre>
           </div>
           <div id="linterOutput">
-            <h1 align = "center">Our Feedback</h1>
-            <pre align = "left">
-              <SyntaxHighlighter 
-                language='shell'
+            <h1 align="center">Our Feedback</h1>
+            <pre align="left">
+              <SyntaxHighlighter
+                language="shell"
                 style={monokaiSublime}
               >
                 {formatLO(this.props.linterOutput, this.props.pyCode)}
@@ -76,8 +73,8 @@ class Viewer extends Component {
           </div>
         </div>
         <div>
-          <Button onClick={()=> this.props.changeMode()}>Lint Another File</Button>
-          <h1> </h1>
+          <Button onClick={() => this.props.changeMode()}>Lint Another File</Button>
+          <h1 />
         </div>
       </div>
 

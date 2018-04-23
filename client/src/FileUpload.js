@@ -25,8 +25,7 @@ const ButtonLabel = styled.label`
     border-radius: 5px;
     text-align: center;
     width: 100px;
-`
-;
+`;
 const UploadButton = styled.input`
 
 `;
@@ -36,26 +35,27 @@ class FileUpload extends Component {
     super(props);
 
 
-
-    this.state = { currentFile: null, }
+    this.state = { currentFile: null };
     this.handleChange = this.handleChange.bind(this);
   }
 
   handleChange(file, props) {
+    this.props.startLoad();
     let contents;
-    var callbackProp = this.props.callback;
+    const callbackProp = this.props.callback;
+
 
     const reader = new FileReader();
     reader.readAsBinaryString(file);
-    reader.onloadend = function(){
+    reader.onloadend = function () {
       contents = reader.result;
 
       const request = new Request(
-      '/submissions', // is it a problem that this doesn't exist?
-      {
-        method: 'POST',
-        body: contents,
-      },
+        '/submissions', // is it a problem that this doesn't exist?
+        {
+          method: 'POST',
+          body: contents,
+        },
       );
 
       fetch(request)
@@ -69,21 +69,19 @@ class FileUpload extends Component {
           callbackProp(contents, linterOutput);
         })
         .catch(err => console.log(err));
-      };
-    }
-
+    };
+  }
 
 
   render(props) {
-
     const uploadButton = <UploadButton type="file" id="file" onChange={e => this.handleChange(e.target.files[0], this.props)} />;
 
     return (
       <div>
-      <Instructions align="center">Begin by uploading your favorite Python file</Instructions>
-      <ButtonLabel>
-        {uploadButton} Choose File
-      </ButtonLabel>
+        <Instructions align="center">Begin by uploading your favorite Python file</Instructions>
+        <ButtonLabel>
+          {uploadButton} Choose File
+        </ButtonLabel>
       </div>
     );
   }

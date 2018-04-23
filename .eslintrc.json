@@ -1,8 +1,4 @@
 {
-<<<<<<< HEAD
-    "extends": "airbnb"
-}
-=======
  "extends": "airbnb",
  "env": {
    "browser": true,
@@ -12,4 +8,3 @@
    "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }]
  }
 }
->>>>>>> cfda13eebf1c745896c1bfd25d0a9f323df17367
