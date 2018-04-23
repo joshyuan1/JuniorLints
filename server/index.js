@@ -35,16 +35,20 @@ app.post('/submissions', (request, response) => {
     //runs command line
     child = exec(`pylint ${filename}.py --output-format=json > ${filename}.json`,
     function (error, stdout, stderr) {
-      //console.log('stdout: ' + stdout);
-      //console.log('stderr: ' + stderr);
       if (error !== null) {
         console.log('exec error: ' + error);
-
-
       }
       const data = JSON.parse(fs.readFileSync(`${filename}.json`, 'utf8'));
-
       response.send(data);
+      
+      //cleanup:
+      child = exec(`rm ./tempFiles/tmp*`, function (error, stdout, stderr) {
+        if (error !== null) {
+          console.log('exec error: ' + error);
+        }
+      });
+
+
     });
 
   });
