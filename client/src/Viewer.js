@@ -8,7 +8,7 @@ import styled from 'styled-components';
 import React, { Component } from 'react';
 import './Viewer.css';
 import SyntaxHighlighter from 'react-syntax-highlighter';
-import { monokaiSublime } from 'react-syntax-highlighter/styles/hljs';
+import { docco, monokaiSublime } from 'react-syntax-highlighter/styles/hljs';
 
 
 const Button = styled.button`
@@ -35,16 +35,34 @@ function formatLO(linterOutput, pyCode){
 }
 
 
-
 class Viewer extends Component {
   constructor(props) {
     super(props);
 
+    console.log(this.props.linterOutput);
   }
 
   render(props) {
 
-    const line = "hello this is the whole line";
+    function errorColor(lineNumber){
+      // color based on error type
+      const correct = {
+        backgroundColor: '#dbffdb',
+        display: 'block',
+        padding: 0,
+      };
+      const incorrect = {
+        backgroundColor: '#ffecec',
+        display: 'block',
+        padding: 0,
+      };
+      if (lineNumber === 21){
+        return correct;
+      }
+      if (lineNumber === 57){
+        return incorrect;
+      }
+    }
 
     return(
 
@@ -56,8 +74,12 @@ class Viewer extends Component {
               <SyntaxHighlighter 
                 language='python' 
                 showLineNumbers={true} 
-                style={monokaiSublime}
+                style={docco}
                 wrapLines={true}
+                lineProps={lineNumber => {
+                  let style = errorColor(lineNumber);
+                  return { style };
+                }}
               >
                 {this.props.pyCode}
               </SyntaxHighlighter>

@@ -4,7 +4,6 @@ import './App.css';
 
 import FileUpload from './FileUpload';
 import Viewer from './Viewer';
-import TestComponent from './TestComponent';
 
 import { Jumbotron } from 'react-bootstrap';
 import { Button } from 'react-bootstrap';
