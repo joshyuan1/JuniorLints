@@ -2,9 +2,8 @@
 // https://gist.github.com/AshikNesin/e44b1950f6a24cfcd85330ffc1713513
 
 import styled from 'styled-components';
-
 import React, { Component } from 'react';
-
+import PropTypes from 'prop-types';
 import './FileUpload.css';
 
 const Instructions = styled.h3`
@@ -35,11 +34,10 @@ class FileUpload extends Component {
     super(props);
 
 
-    this.state = { currentFile: null };
     this.handleChange = this.handleChange.bind(this);
   }
 
-  handleChange(file, props) {
+  handleChange(file) {
     this.props.startLoad();
     let contents;
     const callbackProp = this.props.callback;
@@ -47,7 +45,7 @@ class FileUpload extends Component {
 
     const reader = new FileReader();
     reader.readAsBinaryString(file);
-    reader.onloadend = function () {
+    reader.onloadend = () => {
       contents = reader.result;
 
       const request = new Request(
@@ -67,13 +65,12 @@ class FileUpload extends Component {
         })
         .then((linterOutput) => {
           callbackProp(contents, linterOutput);
-        })
-        .catch(err => console.log(err));
+        });
     };
   }
 
 
-  render(props) {
+  render() {
     const uploadButton = <UploadButton type="file" id="file" onChange={e => this.handleChange(e.target.files[0], this.props)} />;
 
     return (
@@ -86,5 +83,10 @@ class FileUpload extends Component {
     );
   }
 }
+
+FileUpload.propTypes = {
+  callback: PropTypes.func.isRequired,
+  startLoad: PropTypes.func.isRequired,
+};
 
 export default FileUpload;

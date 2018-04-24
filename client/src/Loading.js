@@ -1,6 +1,4 @@
-import styled from 'styled-components';
-import React, { Component } from 'react';
-
+import React from 'react';
 
 function Loading() {
   const loadingMsg = "Hold tight, we're analyzing your code!";

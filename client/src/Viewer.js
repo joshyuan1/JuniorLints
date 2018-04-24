@@ -1,25 +1,19 @@
-// Initial code from GitHub
-// https://gist.github.com/AshikNesin/e44b1950f6a24cfcd85330ffc1713513
-
 import styled from 'styled-components';
-
-// import { Panel } from '../node_modules/reactstrap';
-
-import React, { Component } from 'react';
-import './Viewer.css';
+import React from 'react';
 import SyntaxHighlighter from 'react-syntax-highlighter';
-import { monokaiSublime } from 'react-syntax-highlighter/styles/hljs';
-
+import { docco, monokaiSublime } from 'react-syntax-highlighter/styles/hljs';
+import PropTypes from 'prop-types';
+import './Viewer.css';
 
 const Button = styled.button`
-    background-color: DarkGray;
-    color: black;
-    font-size: 16px;
-    padding: 20px 30px;
-    border: none;
-    cursor: pointer;
-    border-radius: 3px;
-    text-align: center;
+background-color: DarkGray;
+color: black;
+font-size: 16px;
+padding: 20px 30px;
+border: none;
+cursor: pointer;
+border-radius: 3px;
+text-align: center;
 `;
 
 function formatLO(linterOutput, pyCode) {
@@ -34,52 +28,76 @@ function formatLO(linterOutput, pyCode) {
   return (a.join(''));
 }
 
+function errorColor(lineNumber) {
+  // color based on error type
+  const correct = {
+    backgroundColor: '#dbffdb',
+    display: 'block',
+    padding: 0,
+  };
+  const incorrect = {
+    backgroundColor: '#ffecec',
+    display: 'block',
+    padding: 0,
+  };
+  const defaultyyy = {};
 
-class Viewer extends Component {
-  constructor(props) {
-    super(props);
+  if (lineNumber === 21) {
+    return correct;
   }
+  if (lineNumber === 23) {
+    return incorrect;
+  }
+  return defaultyyy;
+}
 
-  render(props) {
-    const line = 'hello this is the whole line';
 
-    return (
+function Viewer(props) {
+  return (
 
-      <div>
-        <div className="flex-container">
-          <div id="code">
-            <h1 align="center">Your Code</h1>
-            <pre align="left">
-              <SyntaxHighlighter
-                language="python"
-                showLineNumbers
-                style={monokaiSublime}
-                wrapLines
-              >
-                {this.props.pyCode}
-              </SyntaxHighlighter>
-            </pre>
-          </div>
-          <div id="linterOutput">
-            <h1 align="center">Our Feedback</h1>
-            <pre align="left">
-              <SyntaxHighlighter
-                language="shell"
-                style={monokaiSublime}
-              >
-                {formatLO(this.props.linterOutput, this.props.pyCode)}
-              </SyntaxHighlighter>
-            </pre>
-          </div>
+    <div>
+      <div className="flex-container">
+        <div id="code">
+          <h1 align="center">Your Code</h1>
+          <pre align="left">
+            <SyntaxHighlighter
+              language="python"
+              showLineNumbers
+              style={docco}
+              wrapLines
+              lineProps={(lineNumber) => {
+      const style = errorColor(lineNumber);
+      return { style };
+    }}
+            >
+              {props.pyCode}
+            </SyntaxHighlighter>
+          </pre>
         </div>
-        <div>
-          <Button onClick={() => this.props.changeMode()}>Lint Another File</Button>
-          <h1 />
+        <div id="linterOutput">
+          <h1 align="center">Our Feedback</h1>
+          <pre align="left">
+            <SyntaxHighlighter
+              language="shell"
+              style={monokaiSublime}
+            >
+              {formatLO(props.linterOutput, props.pyCode)}
+            </SyntaxHighlighter>
+          </pre>
         </div>
       </div>
+      <div>
+        <Button onClick={() => props.changeMode()}>Lint Another File</Button>
+      </div>
+    </div>
 
-    );
-  }
+  );
 }
+
+Viewer.propTypes = {
+  changeMode: PropTypes.func.isRequired,
+  pyCode: PropTypes.string.isRequired,
+  linterOutput: PropTypes.instanceOf(Object).isRequired,
+};
 
 export default Viewer;
