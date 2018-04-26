@@ -38,7 +38,7 @@ function checkComments(splitCode){
     if(line.includes("#")){commentCount+=1};
     if(line.trim()){lineCount+=1};
   });
-  if(commentCount/lineCount < .05){
+  if(commentCount/lineCount < .03){
     return([makeErrorMsg(1, "00000", "Code has very few comments.")]);
   }
   return([]);
