@@ -20,10 +20,11 @@ text-align: center;
 function formatLO(linterOutput, pyCode) {
   // Filter out unneccesary/advanced errors.
   const splitCode = pyCode.slice().split('\n'); //array of lines of code
-  checkComments(splitCode); //make first error in first line (i.e. prepend to linterOutput)
+  const customErrors = checkComments(splitCode).concat(checkBlankLines(splitCode)); //make first error in first line (i.e. prepend to linterOutput)
+  console.log(customErrors);
   const a = new Array(splitCode.length);
   a.fill('\n');
-  const errors = linterOutput.slice();
+  const errors = customErrors.concat(linterOutput.slice());
   errors.forEach((item) => {if(errorCodes.includes(item["message-id"])){
     a[item.line - 1] = (`Line ${item.line}: ${item.message} \n`);
   }});
@@ -31,11 +32,32 @@ function formatLO(linterOutput, pyCode) {
 }
 
 function checkComments(splitCode){
-  let count = 0;
-  splitCode.forEach((line) => {if(line.includes("#")){count+=1}});
-  const percentCommented = count/splitCode.length;
-  console.log("PERCENT COMMENTED:");
-  console.log(percentCommented);
+  let commentCount = 0;
+  let lineCount = 0;
+  splitCode.forEach((line) => {
+    if(line.includes("#")){commentCount+=1};
+    if(line.trim()){lineCount+=1};
+  });
+  if(commentCount/lineCount < .05){
+    return([makeErrorMsg(1, "00000", "Code has very few comments.")]);
+  }
+  return([]);
+}
+
+function checkBlankLines(splitCode){
+  let lastCode = 0;
+  let currentLine = 1;
+  let blankLineErrors = [];
+  splitCode.forEach((line) => {
+    if(line.trim()){lastCode = currentLine};
+    if(currentLine - lastCode > 3){blankLineErrors.push(makeErrorMsg(lastCode+1, "11111", "Excessive number of blank lines."))};
+    currentLine += 1;
+  });
+  return blankLineErrors;
+}
+
+function makeErrorMsg(line, code, msg){
+  return({"line": line, "message-id": code, "message":msg});
 }
 
 function errorColor(lineNumber) {
