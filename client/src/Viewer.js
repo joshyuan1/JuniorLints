@@ -4,6 +4,7 @@ import SyntaxHighlighter from 'react-syntax-highlighter';
 import { docco, monokaiSublime } from 'react-syntax-highlighter/styles/hljs';
 import PropTypes from 'prop-types';
 import './Viewer.css';
+import errorCodes from './errorCodes';
 
 const Button = styled.button`
 background-color: DarkGray;
@@ -18,14 +19,23 @@ text-align: center;
 
 function formatLO(linterOutput, pyCode) {
   // Filter out unneccesary/advanced errors.
-  const numLines = pyCode.slice().split('\n').length;
-  const a = new Array(numLines);
+  const splitCode = pyCode.slice().split('\n'); //array of lines of code
+  checkComments(splitCode); //make first error in first line (i.e. prepend to linterOutput)
+  const a = new Array(splitCode.length);
   a.fill('\n');
   const errors = linterOutput.slice();
-  errors.forEach((item) => {
+  errors.forEach((item) => {if(errorCodes.includes(item["message-id"])){
     a[item.line - 1] = (`Line ${item.line}: ${item.message} \n`);
-  });
+  }});
   return (a.join(''));
+}
+
+function checkComments(splitCode){
+  let count = 0;
+  splitCode.forEach((line) => {if(line.includes("#")){count+=1}});
+  const percentCommented = count/splitCode.length;
+  console.log("PERCENT COMMENTED:");
+  console.log(percentCommented);
 }
 
 function errorColor(lineNumber) {
