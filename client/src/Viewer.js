@@ -1,88 +1,95 @@
 import styled from 'styled-components';
 import React from 'react';
 import SyntaxHighlighter from 'react-syntax-highlighter';
-import { docco, monokaiSublime } from 'react-syntax-highlighter/styles/hljs';
+import { docco } from 'react-syntax-highlighter/styles/hljs';
 import PropTypes from 'prop-types';
 import './Viewer.css';
-import errorCodes from './errorCodes';
+import errorCodes from './errorCodes.json';
 
 const Button = styled.button`
 background-color: DarkGray;
 color: black;
 font-size: 16px;
 padding: 20px 30px;
+margin: 30px;
 border: none;
 cursor: pointer;
 border-radius: 3px;
 text-align: center;
 `;
 
-function formatLO(linterOutput, pyCode) {
-  // Filter out unneccesary/advanced errors.
-  const splitCode = pyCode.slice().split('\n'); //array of lines of code
-  const customErrors = checkComments(splitCode).concat(checkBlankLines(splitCode)); //make first error in first line (i.e. prepend to linterOutput)
-  console.log(customErrors);
-  const a = new Array(splitCode.length);
-  a.fill('\n');
-  const errors = customErrors.concat(linterOutput.slice());
-  errors.forEach((item) => {if(errorCodes.includes(item["message-id"])){
-    a[item.line - 1] = (`Line ${item.line}: ${item.message} \n`);
-  }});
-  return (a.join(''));
+// creates error message for custom errors (not in Pylint/PEP-8)
+function makeErrorMsg(line, code, msg) {
+  return ({ line, 'message-id': code, message: msg });
 }
 
-function checkComments(splitCode){
+// checks frequency of comments throughout Python code
+function checkComments(splitCode) {
   let commentCount = 0;
   let lineCount = 0;
   splitCode.forEach((line) => {
-    if(line.includes("#")){commentCount+=1};
-    if(line.trim()){lineCount+=1};
+    if (line.includes('#')) { commentCount += 1; }
+    if (line.trim()) { lineCount += 1; }
   });
-  if(commentCount/lineCount < .03){
-    return([makeErrorMsg(1, "00000", "Code has very few comments.")]);
+  if (commentCount / lineCount < 0.03) {
+    return ([makeErrorMsg(1, '00000', 'Code has very few comments.')]);
   }
-  return([]);
+  return ([]);
 }
 
-function checkBlankLines(splitCode){
+// checks for consecutive blank lines throughout Python code
+function checkBlankLines(splitCode) {
   let lastCode = 0;
   let currentLine = 1;
-  let blankLineErrors = [];
+  const blankLineErrors = [];
   splitCode.forEach((line) => {
-    if(line.trim()){lastCode = currentLine};
-    if(currentLine - lastCode > 3){blankLineErrors.push(makeErrorMsg(lastCode+1, "11111", "Excessive number of blank lines."))};
+    if (line.trim()) { lastCode = currentLine; }
+    if (currentLine - lastCode > 3) { blankLineErrors.push(makeErrorMsg(lastCode + 1, '11111', 'Excessive number of blank lines.')); }
     currentLine += 1;
   });
   return blankLineErrors;
 }
 
-function makeErrorMsg(line, code, msg){
-  return({"line": line, "message-id": code, "message":msg});
+// formats the Pylint output to be displayed in the feedback window
+function formatLO(linterOutput, pyCode) {
+  // Filter out unneccesary/advanced errors.
+  const splitCode = pyCode.slice().split('\n'); // array of lines of code
+  // make first error in first line (i.e. prepend to linterOutput)
+  const customErrors = checkComments(splitCode).concat(checkBlankLines(splitCode));
+  const a = new Array(splitCode.length);
+  a.fill('\n');
+  const errors = customErrors.concat(linterOutput.slice());
+  errors.forEach((item) => {
+    if (errorCodes.includes(item['message-id'])) {
+      a[item.line - 1] = (`Line ${item.line}: ${item.message} \n`);
+    }
+  });
+  return (a.join(''));
 }
 
-function errorColor(lineNumber) {
-  // color based on error type
-  const correct = {
-    backgroundColor: '#dbffdb',
+// Applies colored hightling to each error-containing line
+function errorColor(errorTypes, lineNumber) {
+  let color;
+
+  if (errorTypes[lineNumber]) {
+    if (errorTypes[lineNumber] === 'convention') {
+      color = '#dbffdb'; // green
+    } else if (errorTypes[lineNumber] === 'warning') {
+      color = '#ffffb3'; // yellow
+    } else if (errorTypes[lineNumber] === 'refactor') {
+      color = '#e6b3e6'; // pink
+    } else if (errorTypes[lineNumber] === 'error' || errorTypes[lineNumber] === 'fatal') {
+      color = '#ffecec'; // red
+    }
+  }
+
+  const format = {
+    backgroundColor: color,
     display: 'block',
     padding: 0,
   };
-  const incorrect = {
-    backgroundColor: '#ffecec',
-    display: 'block',
-    padding: 0,
-  };
-  const defaultyyy = {};
-
-  if (lineNumber === 21) {
-    return correct;
-  }
-  if (lineNumber === 23) {
-    return incorrect;
-  }
-  return defaultyyy;
+  return format;
 }
-
 
 function Viewer(props) {
   return (
@@ -98,7 +105,7 @@ function Viewer(props) {
               style={docco}
               wrapLines
               lineProps={(lineNumber) => {
-      const style = errorColor(lineNumber);
+      const style = errorColor(props.errorTypes, lineNumber);
       return { style };
     }}
             >
@@ -111,7 +118,7 @@ function Viewer(props) {
           <pre align="left">
             <SyntaxHighlighter
               language="shell"
-              style={monokaiSublime}
+              style={docco}
             >
               {formatLO(props.linterOutput, props.pyCode)}
             </SyntaxHighlighter>
@@ -129,6 +136,7 @@ function Viewer(props) {
 Viewer.propTypes = {
   changeMode: PropTypes.func.isRequired,
   pyCode: PropTypes.string.isRequired,
+  errorTypes: PropTypes.instanceOf(Array).isRequired,
   linterOutput: PropTypes.instanceOf(Object).isRequired,
 };
 

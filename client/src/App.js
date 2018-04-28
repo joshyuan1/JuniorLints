@@ -1,8 +1,12 @@
 import React, { Component } from 'react';
+
 import './App.css';
+
 import FileUpload from './FileUpload';
 import Viewer from './Viewer';
 import Loading from './Loading';
+
+import errorCodes from './errorCodes.json';
 
 class App extends Component {
   constructor() {
@@ -11,8 +15,22 @@ class App extends Component {
     this.state = {
       pyCode: null,
       linterOutput: null,
+      errorTypes: null,
       mode: 'upload',
     };
+  }
+
+  // Set errorTypes prop as array of Pylint error types
+  getErrorTypes(pyCode, linterOutput) {
+    const splitCode = pyCode.slice().split('\n'); // array of lines of code
+    const errorTypeArray = new Array(splitCode.length);
+    const errors = linterOutput.slice();
+    errors.forEach((item) => {
+      if (errorCodes.includes(item['message-id'])) {
+        errorTypeArray[item.line] = (`${item.type}`);
+      }
+    });
+    this.state.errorTypes = errorTypeArray;
   }
 
   render() {
@@ -27,10 +45,12 @@ class App extends Component {
       );
     }
     if (this.state.mode === 'view') {
+      this.getErrorTypes(this.state.pyCode, this.state.linterOutput);
       comp = (
         <Viewer
           pyCode={this.state.pyCode}
           linterOutput={this.state.linterOutput}
+          errorTypes={this.state.errorTypes}
           changeMode={() => this.setState({ mode: 'upload' })}
         />);
     }
