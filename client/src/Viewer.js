@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import React from 'react';
+import React, { Component } from 'react';
 import SyntaxHighlighter from 'react-syntax-highlighter';
 import { docco } from 'react-syntax-highlighter/styles/hljs';
 import PropTypes from 'prop-types';
@@ -51,12 +51,13 @@ function checkBlankLines(splitCode) {
 }
 
 // formats the Pylint output to be displayed in the feedback window
-function formatLO(linterOutput, pyCode) {
+function formatLO(pyCode, linterOutput) {
   // Filter out unneccesary/advanced errors.
   const splitCode = pyCode.slice().split('\n'); // array of lines of code
   // make first error in first line (i.e. prepend to linterOutput)
   const customErrors = checkComments(splitCode).concat(checkBlankLines(splitCode));
   const a = new Array(splitCode.length);
+
   a.fill('\n');
   const errors = customErrors.concat(linterOutput.slice());
   errors.forEach((item) => {
@@ -65,6 +66,20 @@ function formatLO(linterOutput, pyCode) {
     }
   });
   return (a.join(''));
+}
+
+// Set errorTypes prop as array of Pylint error types
+function getErrorTypes(pyCode, linterOutput) {
+  const splitCode = pyCode.slice().split('\n'); // array of lines of code
+  const errorTypeArray = new Array(splitCode.length);
+  const errors = linterOutput.slice();
+  errors.forEach((item) => {
+    if (errorCodes.includes(item['message-id'])) {
+      // if this alrady exists (if its non empty) set type to 'multiple'
+      errorTypeArray[item.line] = (`${item.type}`);
+    }
+  });
+  return errorTypeArray;
 }
 
 // Applies colored hightling to each error-containing line
@@ -91,52 +106,61 @@ function errorColor(errorTypes, lineNumber) {
   return format;
 }
 
-function Viewer(props) {
-  return (
+class Viewer extends Component {
+  constructor(props) {
+    super(props);
 
-    <div>
-      <div className="flex-container">
-        <div id="code">
-          <h1 align="center">Your Code</h1>
-          <pre align="left">
-            <SyntaxHighlighter
-              language="python"
-              showLineNumbers
-              style={docco}
-              wrapLines
-              lineProps={(lineNumber) => {
-      const style = errorColor(props.errorTypes, lineNumber);
-      return { style };
-    }}
-            >
-              {props.pyCode}
-            </SyntaxHighlighter>
-          </pre>
-        </div>
-        <div id="linterOutput">
-          <h1 align="center">Our Feedback</h1>
-          <pre align="left">
-            <SyntaxHighlighter
-              language="shell"
-              style={docco}
-            >
-              {formatLO(props.linterOutput, props.pyCode)}
-            </SyntaxHighlighter>
-          </pre>
-        </div>
-      </div>
+    this.state = {
+      formattedLO: formatLO(this.props.pyCode, this.props.linterOutput),
+      errorTypes: getErrorTypes(this.props.pyCode, this.props.linterOutput),
+    };
+  }
+
+  render() {
+    return (
+
       <div>
-        <Button onClick={() => props.changeMode()}>Lint Another File</Button>
+        <div className="flex-container">
+          <div id="code">
+            <h1 align="center">Your Code</h1>
+            <pre align="left">
+              <SyntaxHighlighter
+                language="python"
+                showLineNumbers
+                style={docco}
+                wrapLines
+                lineProps={(lineNumber) => {
+        const style = errorColor(this.state.errorTypes, lineNumber);
+        return { style };
+      }}
+              >
+                {this.props.pyCode}
+              </SyntaxHighlighter>
+            </pre>
+          </div>
+          <div id="linterOutput">
+            <h1 align="center">Our Feedback</h1>
+            <pre align="left">
+              <SyntaxHighlighter
+                language="shell"
+                style={docco}
+              >
+                {this.state.formattedLO}
+              </SyntaxHighlighter>
+            </pre>
+          </div>
+        </div>
+        <div>
+          <Button onClick={() => this.props.changeMode()}>Lint Another File</Button>
+        </div>
       </div>
-    </div>
-
-  );
+    );
+  }
 }
 
 Viewer.propTypes = {
   changeMode: PropTypes.func.isRequired,
   pyCode: PropTypes.string.isRequired,
-  errorTypes: PropTypes.instanceOf(Array).isRequired,
   linterOutput: PropTypes.instanceOf(Object).isRequired,
 };
 
