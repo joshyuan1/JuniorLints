@@ -65,7 +65,7 @@ function formatLO(pyCode, linterOutput) {
 
   errors.forEach((item) => {
     if (errorCodes.includes(item['message-id'])) { //remove uncessary errors
-      a[item.line - 1] = `Line ${item.line}: ${item.message.trim()} `.concat(a[item.line - 1]);
+      a[item.line - 1] = `(Line ${item.line}: ${item.message.trim()}) `.concat(a[item.line - 1]);
     }
   });
   return (a.join(''));
