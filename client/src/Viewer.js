@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+  import styled from 'styled-components';
 import React, { Component } from 'react';
 import SyntaxHighlighter from 'react-syntax-highlighter';
 import { docco } from 'react-syntax-highlighter/styles/hljs';
@@ -32,7 +32,7 @@ function checkComments(splitCode) {
     if (line.trim()) { lineCount += 1; }
   });
   if (commentCount / lineCount < 0.03) {
-    return ([makeErrorMsg(1, '00000', 'Code has very few comments.')]);
+    return ([makeErrorMsg(1, '00000', 'Code has very few comments')]);
   }
   return ([]);
 }
@@ -44,7 +44,7 @@ function checkBlankLines(splitCode) {
   const blankLineErrors = [];
   splitCode.forEach((line) => {
     if (line.trim()) { lastCode = currentLine; }
-    if (currentLine - lastCode > 3) { blankLineErrors.push(makeErrorMsg(lastCode + 1, '11111', 'Excessive number of blank lines.')); }
+    if (currentLine - lastCode > 3) { blankLineErrors.push(makeErrorMsg(lastCode + 1, '11111', 'Excessive number of blank lines')); }
     currentLine += 1;
   });
   return blankLineErrors;
@@ -54,18 +54,32 @@ function checkBlankLines(splitCode) {
 function formatLO(pyCode, linterOutput) {
   // Filter out unneccesary/advanced errors.
   const splitCode = pyCode.slice().split('\n'); // array of lines of code
-  // make first error in first line (i.e. prepend to linterOutput)
-  const customErrors = checkComments(splitCode).concat(checkBlankLines(splitCode));
+  // make first error in first line number of comments (i.e. prepend to linterOutput)
+  const customErrors = checkBlankLines(splitCode).concat(checkComments(splitCode));
   const a = new Array(splitCode.length);
 
   a.fill('\n');
-  const errors = customErrors.concat(linterOutput.slice());
+
+  let errors = linterOutput.slice().concat(customErrors);
+  errors = filterUndefinedVars(splitCode, errors);
+
   errors.forEach((item) => {
-    if (errorCodes.includes(item['message-id'])) {
-      a[item.line - 1] = (`Line ${item.line}: ${item.message} \n`);
+    if (errorCodes.includes(item['message-id'])) { //remove uncessary errors
+      a[item.line - 1] = `Line ${item.line}: ${item.message.trim()} `.concat(a[item.line - 1]);
     }
   });
   return (a.join(''));
+}
+
+function filterUndefinedVars(splitCode, errors){
+  let result =  errors;
+  splitCode.forEach((line) => {
+    if (line.includes("import") && line.includes("*")){
+      console.log(line);
+      result = errors.filter((error) => error['message-id'] !== "E0602"); //remove undefined variable errors
+    }
+  });
+  return result;
 }
 
 // Set errorTypes prop as array of Pylint error types
