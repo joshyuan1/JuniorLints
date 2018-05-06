@@ -54,20 +54,18 @@ function checkBlankLines(splitCode) {
 function formatLO(pyCode, linterOutput) {
   // Filter out unneccesary/advanced errors.
   const splitCode = pyCode.slice().split('\n'); // array of lines of code
-  // make first error in first line (i.e. prepend to linterOutput)
-  const customErrors = checkComments(splitCode).concat(checkBlankLines(splitCode));
+  // make first error in first line number of comments (i.e. prepend to linterOutput)
+  const customErrors = checkBlankLines(splitCode).concat(checkComments(splitCode));
   const a = new Array(splitCode.length);
 
   a.fill('\n');
 
-  let errors = customErrors.concat(linterOutput.slice());
-    console.log(errors);
+  let errors = linterOutput.slice().concat(customErrors);
   errors = filterUndefinedVars(splitCode, errors);
-    console.log(errors);
 
   errors.forEach((item) => {
-    if (errorCodes.includes(item['message-id'])) {
-      a[item.line - 1] = (`Line ${item.line}: ${item.message} \n`);
+    if (errorCodes.includes(item['message-id'])) { //remove uncessary errors
+      a[item.line - 1] = `Line ${item.line}: ${item.message.trim()} `.concat(a[item.line - 1]);
     }
   });
   return (a.join(''));
