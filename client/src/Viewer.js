@@ -32,7 +32,7 @@ function checkComments(splitCode) {
     if (line.trim()) { lineCount += 1; }
   });
   if (commentCount / lineCount < 0.03) {
-    return ([makeErrorMsg(1, '00000', 'Code has very few comments.')]);
+    return ([makeErrorMsg(1, '00000', 'Code has very few comments')]);
   }
   return ([]);
 }
@@ -44,7 +44,7 @@ function checkBlankLines(splitCode) {
   const blankLineErrors = [];
   splitCode.forEach((line) => {
     if (line.trim()) { lastCode = currentLine; }
-    if (currentLine - lastCode > 3) { blankLineErrors.push(makeErrorMsg(lastCode + 1, '11111', 'Excessive number of blank lines.')); }
+    if (currentLine - lastCode > 3) { blankLineErrors.push(makeErrorMsg(lastCode + 1, '11111', 'Excessive number of blank lines')); }
     currentLine += 1;
   });
   return blankLineErrors;
@@ -59,13 +59,29 @@ function formatLO(pyCode, linterOutput) {
   const a = new Array(splitCode.length);
 
   a.fill('\n');
-  const errors = customErrors.concat(linterOutput.slice());
+
+  let errors = customErrors.concat(linterOutput.slice());
+    console.log(errors);
+  errors = filterUndefinedVars(splitCode, errors);
+    console.log(errors);
+
   errors.forEach((item) => {
     if (errorCodes.includes(item['message-id'])) {
       a[item.line - 1] = (`Line ${item.line}: ${item.message} \n`);
     }
   });
   return (a.join(''));
+}
+
+function filterUndefinedVars(splitCode, errors){
+  let result =  errors;
+  splitCode.forEach((line) => {
+    if (line.includes("import") && line.includes("*")){
+      console.log(line);
+      result = errors.filter((error) => error['message-id'] !== "E0602"); //remove undefined variable errors
+    }
+  });
+  return result;
 }
 
 // Set errorTypes prop as array of Pylint error types
