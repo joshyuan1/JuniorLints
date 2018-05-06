@@ -6,6 +6,66 @@ import PropTypes from 'prop-types';
 import './Viewer.css';
 import errorCodes from './errorCodes.json';
 
+import Tooltip from 'rc-tooltip';
+import 'rc-tooltip/assets/bootstrap.css';
+
+const text1 = <span>Convention</span>;
+const text2 = <span>Warning</span>;
+const text3 = <span>Multiple Errors</span>;
+const text4 = <span>Fatal</span>;
+
+const rowStyle = {
+  display: 'table-row',
+};
+
+const style1 = {
+  position: 'relative',
+  display: 'table-cell',
+  height: '30px',
+  width: '30px',
+  textAlign: 'center',
+  background: '#dbffdb',
+  margin: '100px 0px 0px 0px',
+  verticalAlign: 'middle',
+  border: '10px solid white',
+};
+
+const style2 = {
+  position: 'relative',
+  display: 'table-cell',
+  height: '30px',
+  width: '30px',
+  textAlign: 'center',
+  background: '#ffffb3',
+  margin: '100px 0px 0px 0px',
+  verticalAlign: 'middle',
+  border: '10px solid white',
+};
+
+const style3 = {
+  position: 'relative',
+  display: 'table-cell',
+  height: '30px',
+  width: '30px',
+  textAlign: 'center',
+  background: '#e6b3e6',
+  margin: '100px 0px 0px 0px',
+  verticalAlign: 'middle',
+  border: '10px solid white',
+};
+
+const style4 = {
+  position: 'relative',
+  display: 'table-cell',
+  height: '30px',
+  width: '30px',
+  textAlign: 'center',
+  background: '#f65555',
+  margin: '100px 0px 0px 0px',
+  verticalAlign: 'middle',
+  border: '10px solid white',
+};
+
 const Button = styled.button`
 background-color: DarkGray;
 color: black;
@@ -108,7 +168,7 @@ function errorColor(errorTypes, lineNumber) {
     } else if (errorTypes[lineNumber] === 'refactor') {
       color = '#e6b3e6'; // pink
     } else if (errorTypes[lineNumber] === 'error' || errorTypes[lineNumber] === 'fatal') {
-      color = '#ffecec'; // red
+      color = '#f65555'; // red
     }
   }
 
@@ -165,6 +225,18 @@ class Viewer extends Component {
           </div>
         </div>
         <div>
+        <Tooltip placement="top" overlay={text1}>
+            <a href="javascript:void(0);" style={style1} />
+          </Tooltip>
+          <Tooltip placement="top" overlay={text2}>
+            <a href="javascript:void(0);" style={style2} />
+          </Tooltip>
+          <Tooltip placement="top" overlay={text3}>
+            <a href="javascript:void(0);" style={style3} />
+          </Tooltip>
+          <Tooltip placement="top" overlay={text4}>
+            <a href="javascript:void(0);" style={style4} />
+          </Tooltip>
           <Button onClick={() => this.props.changeMode()}>Lint Another File</Button>
         </div>
       </div>
