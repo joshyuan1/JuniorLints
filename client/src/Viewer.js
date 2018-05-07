@@ -1,4 +1,7 @@
-  import styled from 'styled-components';
+import Tooltip from 'rc-tooltip';
+import 'rc-tooltip/assets/bootstrap.css';
+
+import styled from 'styled-components';
 import React, { Component } from 'react';
 import SyntaxHighlighter from 'react-syntax-highlighter';
 import { docco } from 'react-syntax-highlighter/styles/hljs';
@@ -6,17 +9,10 @@ import PropTypes from 'prop-types';
 import './Viewer.css';
 import errorCodes from './errorCodes.json';
 
-import Tooltip from 'rc-tooltip';
-import 'rc-tooltip/assets/bootstrap.css';
-
 const text1 = <span>Convention</span>;
 const text2 = <span>Warning</span>;
 const text3 = <span>Multiple Errors</span>;
 const text4 = <span>Fatal</span>;
-
-const rowStyle = {
-  display: 'table-row',
-};
 
 const style1 = {
   position: 'relative',
@@ -110,6 +106,18 @@ function checkBlankLines(splitCode) {
   return blankLineErrors;
 }
 
+
+function filterUndefinedVars(splitCode, errors) {
+  let result = errors;
+  splitCode.forEach((line) => {
+    if (line.includes('import') && line.includes('*')) {
+      console.log(line);
+      result = errors.filter(error => error['message-id'] !== 'E0602'); // remove undefined variable errors
+    }
+  });
+  return result;
+}
+
 // formats the Pylint output to be displayed in the feedback window
 function formatLO(pyCode, linterOutput) {
   // Filter out unneccesary/advanced errors.
@@ -124,33 +132,26 @@ function formatLO(pyCode, linterOutput) {
   errors = filterUndefinedVars(splitCode, errors);
 
   errors.forEach((item) => {
-    if (errorCodes.includes(item['message-id'])) { //remove uncessary errors
+    if (errorCodes.includes(item['message-id'])) { // remove uncessary errors
       a[item.line - 1] = `(Line ${item.line}: ${item.message.trim()}) `.concat(a[item.line - 1]);
     }
   });
   return (a.join(''));
 }
 
-function filterUndefinedVars(splitCode, errors){
-  let result =  errors;
-  splitCode.forEach((line) => {
-    if (line.includes("import") && line.includes("*")){
-      console.log(line);
-      result = errors.filter((error) => error['message-id'] !== "E0602"); //remove undefined variable errors
-    }
-  });
-  return result;
-}
-
 // Set errorTypes prop as array of Pylint error types
 function getErrorTypes(pyCode, linterOutput) {
   const splitCode = pyCode.slice().split('\n'); // array of lines of code
   const errorTypeArray = new Array(splitCode.length);
-  const errors = linterOutput.slice();
+  const errors = filterUndefinedVars(splitCode, linterOutput.slice());
   errors.forEach((item) => {
     if (errorCodes.includes(item['message-id'])) {
       // if this alrady exists (if its non empty) set type to 'multiple'
-      errorTypeArray[item.line] = (`${item.type}`);
+      if (!errorTypeArray[item.line]) {
+        errorTypeArray[item.line] = (`${item.type}`);
+      } else {
+        errorTypeArray[item.line] = 'multiple';
+      }
     }
   });
   return errorTypeArray;
@@ -161,11 +162,11 @@ function errorColor(errorTypes, lineNumber) {
   let color;
 
   if (errorTypes[lineNumber]) {
-    if (errorTypes[lineNumber] === 'convention') {
+    if (errorTypes[lineNumber] === 'convention' || errorTypes[lineNumber] === 'refactor') {
       color = '#dbffdb'; // green
     } else if (errorTypes[lineNumber] === 'warning') {
       color = '#ffffb3'; // yellow
-    } else if (errorTypes[lineNumber] === 'refactor') {
+    } else if (errorTypes[lineNumber] === 'multiple') {
       color = '#e6b3e6'; // pink
     } else if (errorTypes[lineNumber] === 'error' || errorTypes[lineNumber] === 'fatal') {
       color = '#f65555'; // red
@@ -225,7 +226,7 @@ class Viewer extends Component {
           </div>
         </div>
         <div>
-        <Tooltip placement="top" overlay={text1}>
+          <Tooltip placement="top" overlay={text1}>
             <a href="javascript:void(0);" style={style1} />
           </Tooltip>
           <Tooltip placement="top" overlay={text2}>

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {Well} from 'react-bootstrap';
+import { Well } from 'react-bootstrap';
 import styled from 'styled-components';
 import './App.css';
 import logo from './logo.png';
@@ -19,7 +19,6 @@ cursor: pointer;
 border-radius: 3px;
 text-align: center;
 `;
-
 
 
 class App extends Component {
@@ -73,35 +72,35 @@ class App extends Component {
         <Loading />
       );
     }
-    if (this.state.viewBio){
+    if (this.state.viewBio) {
       bio = (
         <div align="left">
-          <Button onClick={() => this.setState({viewBio: false})} >
+          <Button onClick={() => this.setState({ viewBio: false })} >
             What is JuniorLints?
           </Button>
           <div>
-          <Well >
-            <p>
+            <Well >
+              <p>
               "Linting" is the act of checking a piece of code for errors and bad style. "Static analysis" is code analysis that is performed without actually executing the code. <strong>JuniorLints</strong> will check your python code for some basic problems and style conventions. <strong>JuniorLints</strong> might not catch everything, but it will probably help!
-            </p>
-            <input
-              type="image"
-              src={logo}
-              alt="logo"
-              width="300px"
-            />
-          </Well>
+              </p>
+              <input
+                type="image"
+                src={logo}
+                alt="logo"
+                width="300px"
+              />
+            </Well>
           </div>
         </div>
       );
     } else {
       bio = (
         <div align="left">
-          <Button onClick={() => this.setState({viewBio: true})} >
+          <Button onClick={() => this.setState({ viewBio: true })} >
             What is JuniorLints?
           </Button>
         </div>
-      )
+      );
     }
 
     return (
@@ -112,7 +111,7 @@ class App extends Component {
         </header>
         {comp}
         {bio}
-        </div>
+      </div>
     );
   }
 }
