@@ -1,6 +1,6 @@
 # JuniorLints Client
 
-The JuniorLints client was bootstrapped with [Create React
+The JuniorLints client was created with [Create React
 App](https://github.com/facebookincubator/create-react-app) (CRA) and includes
 all of capabilities provided by CRA.
 
