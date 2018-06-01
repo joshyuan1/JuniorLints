@@ -111,7 +111,6 @@ function filterUndefinedVars(splitCode, errors) {
   let result = errors;
   splitCode.forEach((line) => {
     if (line.includes('import') && line.includes('*')) {
-      console.log(line);
       result = errors.filter(error => error['message-id'] !== 'E0602'); // remove undefined variable errors
     }
   });

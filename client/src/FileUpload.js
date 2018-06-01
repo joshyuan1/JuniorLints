@@ -4,6 +4,7 @@
 import styled from 'styled-components';
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import Bio from './Bio';
 import './FileUpload.css';
 
 const Instructions = styled.h3`
@@ -34,10 +35,17 @@ class FileUpload extends Component {
     super(props);
 
 
-    this.handleChange = this.handleChange.bind(this);
+    this.state = {
+      message: '',
+    };
   }
 
   handleChange(file) {
+    if (!file.name.endsWith('.py')) {
+      this.setState({ message: 'Uploaded file was not a valid .py file.' });
+      return;
+    }
+
     this.props.startLoad();
     let contents;
     const callbackProp = this.props.callback;
@@ -49,7 +57,7 @@ class FileUpload extends Component {
       contents = reader.result;
 
       const request = new Request(
-        '/submissions', // is it a problem that this doesn't exist?
+        '/submissions',
         {
           method: 'POST',
           body: contents,
@@ -79,6 +87,8 @@ class FileUpload extends Component {
         <ButtonLabel>
           {uploadButton} Choose File
         </ButtonLabel>
+        <h1 align="center" >{this.state.message}</h1>
+        <Bio />
       </div>
     );
   }
