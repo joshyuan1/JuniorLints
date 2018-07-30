@@ -1,0 +1,8 @@
+deploy:
+  clusters:
+    - target: local
+      environment: staging
+      extra_flags:
+	image_tag: latest
+  flavors:
+    default: {}
